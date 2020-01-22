@@ -5,6 +5,50 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const InternQuestions = [
+    {
+        type: 'input',
+        name: 'Name of Intern',
+        message: 'Name of Intern'
+
+
+    },
+    {
+        type: 'input',
+        name: 'school',
+        message: 'Where does the Intern go to school?'
+    },
+    {
+        type: 'input',
+        name: 'email',
+        message: 'What is your email?'
+    },
+    {
+
+    }
+]
+const start = [
+    { 
+        type : 'confirm',
+        name : 'makeName',
+        message : 'Would you like to add to your team?'
+
+    },
+     {
+        type: 'list',
+        name: 'role',
+        message: 'What is their role?',
+        choices: ['Manager', 'Engineer', 'Intern',],
+
+    }]
+const managerQuestions = [
+    {
+        type : 'input',
+        name : 'officeNumber',
+        message : 'What is your office number?'
+
+    }
+]
 
 const outputPath = path.resolve(__dirname, "output", "team.html");
 
@@ -13,6 +57,25 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+
+inquirer
+    .prompt(start)
+    .then(({makeName,role})=>{
+        if (makeName) {
+            switch (role){
+                case 'Manager':
+                    inquirer
+                    .prompt(managerQuestions)
+                    .then(({officeNumber}) =>{
+                        console.log(officeNumber)
+                    })
+            }
+        }
+
+    })
+ //question one Would you like to add an employee? or Generate Team (list yes/no )
+ //if yes then ask for a role (list ) use a switch here maybe 
+ //
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
