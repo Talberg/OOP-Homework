@@ -86,7 +86,7 @@ const engineerQuestions = [{
 {
     type : 'input',
     name : 'github',
-    message : 'GitHub link:'
+    message : 'GitHub Username:'
 }
 
 
@@ -141,6 +141,12 @@ function addEmployee (){inquirer
             }
             else {
                 const html = render(employees)
+                fs.writeFile('./output/team.html',html,(err)=>{
+                    if (err) throw err
+                    console.log('team.html was created')
+                    
+                    
+                })
                 console.log(html)
             }        })
         }
