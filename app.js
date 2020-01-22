@@ -5,36 +5,39 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
-const InternQuestions = [
+const internQuestions = [
     {
         type: 'input',
-        name: 'Name of Intern',
-        message: 'Name of Intern'
-
-
+        name: 'name',
+        message: 'Name:'
     },
+    {
+        type: 'input',
+        name: 'email',
+        message: 'Email:'
+    },
+    {
+        type: 'input',
+        name: 'id',
+        message: 'ID:'
+    },
+
     {
         type: 'input',
         name: 'school',
         message: 'Where does the Intern go to school?'
     },
-    {
-        type: 'input',
-        name: 'email',
-        message: 'What is your email?'
-    },
-    {
 
-    }
+
 ]
 const start = [
-    { 
-        type : 'confirm',
-        name : 'makeName',
-        message : 'Would you like to add to your team?'
+    {
+        type: 'confirm',
+        name: 'makeName',
+        message: 'Would you like to add to your team?'
 
     },
-     {
+    {
         type: 'list',
         name: 'role',
         message: 'What is their role?',
@@ -43,12 +46,54 @@ const start = [
     }]
 const managerQuestions = [
     {
-        type : 'input',
-        name : 'officeNumber',
-        message : 'What is your office number?'
+        type: 'input',
+        name: 'name',
+        message: 'Name:'
+    },
+    {
+        type: 'input',
+        name: 'email',
+        message: 'Email:'
+    },
+    {
+        type: 'input',
+        name: 'id',
+        message: 'ID:'
+    },
+    {
+        type: 'input',
+        name: 'officeNumber',
+        message: 'What is your office number?'
 
-    }
+    },
+    
 ]
+const engineerQuestions = [{
+    type: 'input',
+    name: 'name',
+    message: 'Name:'
+},
+{
+    type: 'input',
+    name: 'email',
+    message: 'Email:'
+},
+{
+    type: 'input',
+    name: 'id',
+    message: 'ID:'
+},
+{
+    type : 'input',
+    name : 'github',
+    message : 'GitHub link:'
+}
+
+
+]
+
+const employees = []
+
 
 const outputPath = path.resolve(__dirname, "output", "team.html");
 
@@ -58,21 +103,50 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
-inquirer
+function addEmployee (){inquirer
     .prompt(start)
-    .then(({makeName,role})=>{
+    .then(({ makeName, role }) => {
         if (makeName) {
-            switch (role){
-                case 'Manager':
+            
+                if (role === 'Manager'){ 
                     inquirer
-                    .prompt(managerQuestions)
-                    .then(({officeNumber}) =>{
-                        console.log(officeNumber)
-                    })
-            }
-        }
+                        .prompt(managerQuestions)
+                        .then((data) => {
+                            const manager = new Manager(data.name,data.id,data.email,data.officeNumber)
+                            employees.push(manager)
+                            console.log(employees)
+                            addEmployee()
+                            
+                        })}
 
-    })
+                if(role === 'Intern') {
+                    inquirer
+                        .prompt(internQuestions)
+                        .then((data) => {
+                            const intern = new Intern (data.name,data.id,data.email,data.school)
+                            employees.push(intern)
+                            console.log(employees)
+                            addEmployee()
+                        
+                        })}
+                if(role === 'Engineer') {
+                    inquirer
+                        .prompt(engineerQuestions)
+                        .then((data) => {
+                            const engineer = new Engineer (data.name,data.id,data.email,data.github)
+                            employees.push(engineer)
+                            console.log(employees)
+                            addEmployee()
+                        })}
+            }
+            else {
+                const html = render(employees)
+                console.log(html)
+            }        })
+        }
+        addEmployee()
+
+   
  //question one Would you like to add an employee? or Generate Team (list yes/no )
  //if yes then ask for a role (list ) use a switch here maybe 
  //
